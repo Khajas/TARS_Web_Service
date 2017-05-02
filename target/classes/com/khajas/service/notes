@@ -1,0 +1,14 @@
+https://www.zipcodeapi.com/API
+next flight to
+next flight to from
+next train to
+next train to from
+next holiday
+next bus to 
+next bus from to
+
+// Collect all the words of intents into a set, so as to separate the non intent words
+// Spell corrections
+// Send SMS API
+// Update parse method as
+//		Map<String, String> parse(JSONObject json, String...filedsToBeParsed)
