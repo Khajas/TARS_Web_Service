@@ -1,11 +1,15 @@
 package com.khajas.resource;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.khajas.service.ApiCall;
 import com.khajas.service.Intents;
 import com.khajas.service.NamedEntityRecognition;
+import com.khajas.service.GlobalDateTime.DateTimeApi;
 import com.khajas.service.currency.CurrencyApi;
 import com.khajas.service.locationservice.LocationService;
 import com.khajas.service.maths.Maths;
@@ -14,10 +18,9 @@ import com.khajas.service.personal.MyIdentification;
 import com.khajas.service.weatherinfo.WeatherInfo;
 import com.khajas.service.wiki.WikiApi;
 
-import GlobalDateTime.DateTimeApi;
-
 public class NQTD {
 	private String query;
+	private String response;
 	private String userIP;
 	private LocationService ls;
 	private WeatherInfo wi;
@@ -28,6 +31,7 @@ public class NQTD {
 	private CurrencyApi ca;
 	private MyIdentification mi;
 	private String userCity;
+	private boolean debug;
 	
 	public NQTD(String userIP, String query){
 		this.query=query;
@@ -47,7 +51,19 @@ public class NQTD {
 	public void printCommands(){
 		ApiCall.print_commands();
 	}
-	
+	private void captureLogs(String query, String response){
+		try {
+			String fileName="C:\\Users\\Anwar\\Desktop\\logs.txt";
+			FileWriter fw=new FileWriter(fileName,true);
+			fw.write(query+":	"+response+System.getProperty("line.separator"));
+			fw.close();
+			System.out.println("===========> Captured logs!");
+		} catch (FileNotFoundException e) {
+			System.out.println("Can't write to file!");
+		} catch (IOException e) {
+			System.out.println("Can't write to file!");
+		}
+	}
 	public String detectServiceType(){
 		NamedEntityRecognition ner=new NamedEntityRecognition(query);
 		String query_words=ner.getEnglishEntity();
@@ -60,7 +76,8 @@ public class NQTD {
 			Matcher m = pattern.matcher(search);
 			if(m.find()){
 				ma.setQuery(search);
-				return ma.serve(" ");
+				response=ma.serve(" ");
+//				return response;
 			}
 			else{
 				String response="";
@@ -72,50 +89,69 @@ public class NQTD {
 					wa.setQuery(search.toUpperCase());	// Else it may be an abreviation(AIMIM)
 					response=processString(wa.serve(""));
 				}
-				return response;
+				this.response=response;
+//				return response;
 			}
 		}
 		Intents i=ApiCall.searchIntent(query_words);
 		if(i==null) return "I don't understand!";
-		if(i.getCategory().equals("locationservice"))
-			return processString(ls.serve(i.getResponse()));
+		if(i.getCategory().equals("locationservice")){
+			System.out.println("Calling location service");
+			response=processString(ls.serve(i.getResponse()));
+//			return response;
+		}
 		else if(i.getCategory().equals("weatherinfo")
 				|| i.getCategory().equals("weatherinforemote")){
 			if(!ner.getNamedEntity().isEmpty())
 				wi.setCity(ner.getNamedEntity());
-			return processString(wi.serve(i.getResponse()));
+			System.out.println("Calling weather information");
+			response=processString(wi.serve(i.getResponse()));
+//			return response;
 		}
 		else if(i.getCategory().equals("wikiapi")){
 			String search=ner.getNamedEntity();
 			search=search.replaceAll(" ","");
 			System.out.println("Wiki querying: "+search);
 			wa.setQuery(search);
-			return processString(wa.serve(i.getResponse()));
+			System.out.println("Calling wiki Api");
+			response=processString(wa.serve(i.getResponse()));
+//			return response;
 		}
 		else if(i.getCategory().contains("news")){
 			na.setNewsLocation(i.getCategory());
-			return processString(na.serve(i.getResponse()));
+			System.out.println("Calling News Api for : "+i.getCategory());
+			response=processString(na.serve(i.getResponse()));
+//			return response;
 		}
 		else if(i.getCategory().equals("datetime")){
 			if(!ner.getNamedEntity().isEmpty())
 				dta.setCity(ner.getNamedEntity());
-			return dta.serve("It's");
+			System.out.println("Calling date time api");
+			response=dta.serve("It's");
+//			return response;
 		}
 		else if(i.getCategory().equals("maths")){
 			String exp=ner.getNamedEntity();
 			exp=exp.replaceAll(" ", "+");
 			if(!ner.getNamedEntity().isEmpty())
 				ma.setQuery(exp.substring(0, exp.length()-1));
-			return ma.serve("");
+			System.out.println("Calling maths api");
+			response=ma.serve("");
+//			return response;
 		}
 		else if(i.getCategory().equals("currenyapi")){
-			// TO-DO code for specific query
-			return ca.serve(i.getResponse());
+			System.out.println("Calling Currency api");
+			response=ca.serve(i.getResponse());
+//			return response;
 		}
 		else if(i.getCategory().equals("me")){
-			return mi.serve(i.getResponse());
+			System.out.println("Calling self information");
+			response=mi.serve(i.getResponse());
+//			return response;
 		}
-		return "I don't understand!";
+		else response="I don't understand!";
+		this.captureLogs(query, response);
+		return response;
 	}
 	private String processString(String str){
 		String response="";

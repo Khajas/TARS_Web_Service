@@ -18,7 +18,7 @@ import org.json.JSONObject;
 public abstract class ApiCall {
 	private static ArrayList<Intents> intents=new ArrayList<>();
 	public static Set<String> intent_words=new HashSet<String>();
-	
+	public static double fidality= 0.4;
 	public JSONObject callApi(URL url) throws IOException, JSONException{
         HttpURLConnection conn = (HttpURLConnection) url.openConnection(); 
         conn.setRequestMethod("GET");
@@ -35,6 +35,10 @@ public abstract class ApiCall {
 		}
 		conn.disconnect();
 		return new JSONObject(message);
+	}
+	
+	public void setFidality(double f){
+		fidality=f;
 	}
 	
 	public boolean addIntent(String command, String category, String response){
@@ -81,7 +85,7 @@ public abstract class ApiCall {
 			intentScore.put(i, score);
 		}
 		for(Entry<Intents,Double> e: intentScore.entrySet()){
-			if((e.getValue()==highscore) && (highscore>=0.6))
+			if((e.getValue()==highscore) && (highscore>=fidality))
 				return e.getKey();
 		}
 		return null;
