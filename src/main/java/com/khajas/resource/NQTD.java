@@ -10,6 +10,7 @@ import com.khajas.service.ApiCall;
 import com.khajas.service.Intents;
 import com.khajas.service.NamedEntityRecognition;
 import com.khajas.service.GlobalDateTime.DateTimeApi;
+import com.khajas.service.cricscore.CricApi;
 import com.khajas.service.currency.CurrencyApi;
 import com.khajas.service.locationservice.LocationService;
 import com.khajas.service.maths.Maths;
@@ -30,8 +31,11 @@ public class NQTD {
 	private Maths ma;
 	private CurrencyApi ca;
 	private MyIdentification mi;
+	private CricApi ckt_a;
+	
 	private String userCity;
 	private boolean debug;
+	
 	
 	public NQTD(String userIP, String query){
 		this.query=query;
@@ -45,6 +49,7 @@ public class NQTD {
 		ma=new Maths();
 		ca=new CurrencyApi("USD");
 		mi=new MyIdentification();
+		ckt_a=new CricApi();
 		this.printCommands();
 	}
 	
@@ -67,7 +72,6 @@ public class NQTD {
 	public String detectServiceType(){
 		query=query.replaceAll("please", "");
 		NamedEntityRecognition ner=new NamedEntityRecognition(query);
-		
 		String query_words=ner.getEnglishEntity();
 		if(query_words.isEmpty()){
 			String search=ner.getNamedEntity();
@@ -150,6 +154,10 @@ public class NQTD {
 			System.out.println("Calling self information");
 			response=mi.serve(i.getResponse());
 //			return response;
+		}
+		else if(i.getCategory().equals("iplscore")){
+			System.out.println("Calling IPL Api");
+			response=ckt_a.serve("IPL Score: ");
 		}
 		else response="I don't understand!";
 		this.captureLogs(query, response);

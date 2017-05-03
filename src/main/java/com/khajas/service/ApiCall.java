@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +20,7 @@ public abstract class ApiCall {
 	private static ArrayList<Intents> intents=new ArrayList<>();
 	public static Set<String> intent_words=new HashSet<String>();
 	public static double fidality= 0.4;
+
 	public JSONObject callApi(URL url) throws IOException, JSONException{
         HttpURLConnection conn = (HttpURLConnection) url.openConnection(); 
         conn.setRequestMethod("GET");
@@ -36,6 +38,25 @@ public abstract class ApiCall {
 		conn.disconnect();
 		return new JSONObject(message);
 	}
+	
+	public JSONArray getJSONArray(URL url) throws IOException, JSONException{
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection(); 
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/json;charset=UTF-8");
+        if (conn.getResponseCode() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+					+ conn.getResponseCode());
+		}
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+			(conn.getInputStream()),"UTF-8"));
+		String output, message="";
+		while ((output = br.readLine()) != null) {
+			message+=output;
+		}
+		conn.disconnect();
+		return new JSONArray(message);
+	}
+	
 	
 	public void setFidality(double f){
 		fidality=f;
