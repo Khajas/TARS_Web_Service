@@ -17,6 +17,10 @@ public class CricApi extends ApiCall{
 	private ArrayList<String> teams;
 	public CricApi(){
 		super.addIntent("ipl score ", "iplscore", "");
+		super.addIntent("ipl ", "iplscore", "");
+		super.addIntent("Indian Premier League ", "iplscore", "");
+		super.addIntent("t20 score ", "iplscore", "");
+		super.addIntent("t20 ", "iplscore", "");
 		teams=new ArrayList<String>(){
 				{	add("Delhi Daredevils");
 				 	add("Gujarat Lions");
@@ -50,12 +54,12 @@ public class CricApi extends ApiCall{
 				JSONArray match_score = super.getJSONArray(url);
 				response=match_score.toString();
 				JSONObject match_details=match_score.getJSONObject(0);
-				String match_de=match_details.getString("de");
+				String match_de=match_details.getString("de")+"\n";
 				match_de=match_de.replaceAll(": ", ":\n");
-				String match_si=match_details.getString("si");
+				String match_si=match_details.getString("si")+"\n";
 				if(match_de.contains(match_si))
 					match_si="";
-				response=match_de+"\n"+match_si+"\n";
+				response=match_de+match_si;
 			}
 			else response="There are no ipl matches today!";
 		} catch (MalformedURLException e) {
