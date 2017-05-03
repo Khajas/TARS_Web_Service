@@ -56,7 +56,7 @@ public class CricApi extends ApiCall{
 				JSONObject match_details=match_score.getJSONObject(0);
 				String match_de=match_details.getString("de")+"\n";
 				match_de=match_de.replaceAll(": ", ":\n");
-				String match_si=match_details.getString("si")+"\n";
+				String match_si=match_details.getString("si");
 				if(match_de.contains(match_si))
 					match_si="";
 				response=match_de+match_si;
