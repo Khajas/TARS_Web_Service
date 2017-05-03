@@ -65,7 +65,9 @@ public class NQTD {
 		}
 	}
 	public String detectServiceType(){
+		query=query.replaceAll("please", "");
 		NamedEntityRecognition ner=new NamedEntityRecognition(query);
+		
 		String query_words=ner.getEnglishEntity();
 		if(query_words.isEmpty()){
 			String search=ner.getNamedEntity();

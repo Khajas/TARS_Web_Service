@@ -27,7 +27,6 @@ public class DateTimeApi extends ApiCall{
 		super.addIntent("can I get ", "datetime", "");
 		super.addIntent("give time ", "datetime", "");
 		super.addIntent("show me time ", "datetime", "");
-		super.addIntent("time please ", "datetime", "");
 		super.addIntent("may I know ", "datetime", "");
 		super.addIntent("current time ", "datetime", "");
 		super.addIntent("time now", "datetime", "");
