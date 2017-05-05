@@ -13,7 +13,10 @@ public class FootballApi extends ApiCall{
 	
 	@Override
 	public String serve(String append) {
-		return null;
+		return "No supported method!"
 	}
-
+	@Override
+	public String processRequest(String query){
+		return "No supported method!"
+	}
 }
