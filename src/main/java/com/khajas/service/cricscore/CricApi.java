@@ -53,11 +53,13 @@ public class CricApi extends ApiCall{
 	}
 	
 	/**
-        * Process the request by calling the URL for currency api
+        *  Gets all Cricket Scores by calling the URL for currency api
         * and prepare the response, it also makes a call to super class-
         * method to get the JSON response.
+        * @return 
         */
-	public void getAllCricScores(){
+        @Override
+	public String processRequest(String query){
 		response="testing";
 		URL url;
 		long ipl_id=-1;
@@ -91,6 +93,7 @@ public class CricApi extends ApiCall{
 		} catch (IOException | JSONException e) {
 			response=e.getMessage();
 		}
+                return response;
 	}
 	 /**
      * Makes a call to request processor( method processRequest())
@@ -100,7 +103,7 @@ public class CricApi extends ApiCall{
      */
 	@Override
 	public String serve(String append) {
-		this.getAllCricScores();
+		this.processRequest("");  // There is no need for user query
 		return response;
 	}
 }

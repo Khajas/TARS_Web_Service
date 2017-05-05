@@ -168,5 +168,11 @@ public abstract class ApiCall {
 	 */
 	public abstract String serve(String append);
         
+        /**
+         * Process user request and returns response
+         * @param query
+         * @return 
+         */
+        public abstract String processRequest(String query);
 }
 //////////////////////////	END OF SOURCE FILE	///////////////////////////////////////

@@ -55,16 +55,18 @@ public class CurrencyApi extends ApiCall{
     /**
      * Process the request by calling the URL for currency api 
      * and prepare the response, it also makes a call to super class- 
-	 * method to get the JSON response.
+     * method to get the JSON response.
+     * @return 
      */	
-	private void processRequest(){
+        @Override
+	public String processRequest(String query){
 		response="Sorry, I can't fetch currency details!";
 		URL url;
 		try {
 			url = new URL("http://api.fixer.io/latest?base="+base);
 		} catch (MalformedURLException e) {
 			response=e.getMessage();
-			return;
+			return response;
 		}
 		JSONObject json;
 		try {
@@ -83,6 +85,7 @@ public class CurrencyApi extends ApiCall{
 		} catch (IOException | JSONException e) {
 			response=e.getMessage();
 		}
+                return response;
 	}
 
     /**
@@ -93,7 +96,7 @@ public class CurrencyApi extends ApiCall{
      */
 	@Override
 	public String serve(String append) {
-		this.processRequest();
+		this.processRequest("");    // There is no need for user query paramter
 		return append+response;
 	}
 }

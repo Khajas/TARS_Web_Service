@@ -61,15 +61,18 @@ public class MyIdentification extends ApiCall{
 	}
 
 	/**
-     * Makes a call to request processor( method processRequest())
-     * and returns the response appended by the 'append' parameter.
-     * @param append
-     * @return response
-     */	
+        * Makes a call to request processor( method processRequest())
+        * and returns the response appended by the 'append' parameter.
+        * @param append
+        * @return response
+        */	
 	@Override
 	public String serve(String append) {
 		return append;
 	}
-
+        @Override
+        public String processRequest(String query){
+            return "NO SUPPORTED METHOD IMPLEMENTAION";
+        }
 }
 //////////////////	END OF SOURCE FILE	////////////////////////

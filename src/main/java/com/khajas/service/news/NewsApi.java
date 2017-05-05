@@ -66,15 +66,14 @@ public class NewsApi extends ApiCall{
 		super.addIntent("news sports ", "sportsnews", "Sports Headlines: ");
 	}
 
-	/**
+    /**
      * Process the request by calling the URL for currency api
      * and prepare the response, it also makes a call to super class-
      * method to get the JSON response.
-     * @throws JSONException 
-	 * @throws IOException 
-	 * @throws MalformedURLException
-	 */
-	private String processRequest(){
+     * @return response
+     */
+        @Override
+	public String processRequest(String query){
 		String response="";
 		URL url = null;
 		try {
@@ -125,7 +124,7 @@ public class NewsApi extends ApiCall{
      */
 	@Override
 	public String serve(String append) {
-		return append+"\n"+this.processRequest();
+		return append+"\n"+this.processRequest(""); // No query needed at this time ""
 	}
 }
 ///////////////////////		END OF SOURCE FILE	///////////////////////////////

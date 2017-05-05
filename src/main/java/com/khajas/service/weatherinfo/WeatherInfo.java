@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 import com.khajas.service.ApiCall;
  /**
- * Supports Weather skills, it calls weather forecast api
+ * Supports Weather skills, it calls weather forecast API
  * Api documentation can be found on http://openweathermap.org/forecast16
  * Api key: 4cc5cf846711019e80d71b42dcd40434
  * @author - Anwar
@@ -83,8 +83,10 @@ public class WeatherInfo extends ApiCall{
      * Process the request by calling the URL for weatherinfo api
      * and prepare the response, it also makes a call to super class-
      * method to get the JSON response. 
+     * @return response
      */
-	public void findWeather(){		
+        @Override
+	public String processRequest(String query){		
 		URL url;
 		try {
 			if((zipcode!=null) && (countrycode!=null))
@@ -94,16 +96,14 @@ public class WeatherInfo extends ApiCall{
 			url = new URL("http://api.openweathermap.org/data/2.5/weather?"
 					+ "q="+city+"&appid=4cc5cf846711019e80d71b42dcd40434");
 		} catch (MalformedURLException e) {
-			response=e.getMessage();
-			return;
+			return e.getMessage();
 		}
 		JSONObject json;
 		try {
 			json = super.getJsonObject(url);
 			System.out.println(json.toString());
 		} catch (IOException | JSONException e) {
-			response=e.getMessage();
-			return;
+			return e.getMessage();
 		}
 		try {
 			weatherDesc = json.getJSONArray("weather").
@@ -112,10 +112,10 @@ public class WeatherInfo extends ApiCall{
                                 getString("temp")) - 273.15 ;
 			 averageTemp = (String) String.format("%.2f", temp);
 		} catch (JSONException e) {
-			response=e.getMessage();
-			return;
+			return e.getMessage();
 		}
 		response=weatherDesc+" in "+city+" now and temperature is "+this.averageTemp+"'C";
+                return response;
 	}
 	/**
      * Makes a call to request processor( method processRequest())
@@ -125,7 +125,7 @@ public class WeatherInfo extends ApiCall{
      */
 	@Override
 	public String serve(String append){
-		this.findWeather();
+		this.processRequest("");
 		return append+response;
 	}
 		

@@ -62,15 +62,17 @@ public class Maths extends ApiCall{
      * Process the request by calling the URL for maths api
      * and prepare the response, it also makes a call to super class-
      * method to get the JSON response. 
+     * @param exprn
+     * @return 
      */
-	public void calculate(){
-	
+        @Override
+	public String processRequest(String exprn){
 		URL url;
 		try {
 			url = new URL("https://newton.now.sh/simplify/"+query);
 		} catch (MalformedURLException e) {
 			response=e.getMessage();
-			return;
+			return "";
 		}
 		JSONObject json;
 		try {
@@ -78,7 +80,7 @@ public class Maths extends ApiCall{
 			System.out.println(json.toString());
 		} catch (IOException | JSONException e) {
 			response=e.getMessage();
-			return;
+			return "";
 		}
 		try {
 			String expression=json.getString("expression");
@@ -87,6 +89,7 @@ public class Maths extends ApiCall{
 		} catch (JSONException e) {
 			response=e.getMessage();
 		}
+            return "";
 	}
 	
 	/**
@@ -97,8 +100,8 @@ public class Maths extends ApiCall{
      */
 	@Override
 	public String serve(String append) {
-		this.calculate();
-		return append+response;
+		this.processRequest("");    // No need for expression
+ 		return append+response;
 	}
 }
 /////////////////////	END OF SOURCE CODE	//////////////////////////

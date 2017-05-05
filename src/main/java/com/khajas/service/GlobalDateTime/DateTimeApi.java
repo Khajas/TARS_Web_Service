@@ -68,11 +68,13 @@ public class DateTimeApi extends ApiCall{
 	}
 	
     /**
-     * Process the request by calling the URL for geonames api
+     * Process the request by calling the URL for geonames API
      * and prepare the response, it also makes a call to super class-
      * method to get the JSON response.
+     * @return response
      */
-	public void processRequest(){
+        @Override
+	public String processRequest(String query){
 		URL url;
 		try {
 			GetCityLocation gcl=new GetCityLocation(this.city);
@@ -81,7 +83,7 @@ public class DateTimeApi extends ApiCall{
 					+ "lat="+gcl.getLat()+"&lng="+gcl.getLng()+"&username=khajas");
 		} catch (MalformedURLException e) {
 			response=e.getMessage();
-			return;
+			return response;
 		}
 		JSONObject json;
 		try {
@@ -95,6 +97,7 @@ public class DateTimeApi extends ApiCall{
 		} catch (IOException | JSONException e) {
 			response=e.getMessage();
 		}
+                return response;
 	}
 	
 	/**
@@ -131,22 +134,22 @@ public class DateTimeApi extends ApiCall{
          */
 	@Override
 	public String serve(String append) {
-		this.processRequest();
+		this.processRequest("");
 		return this.getResponse();
 	}
 
 	/**
-     * Set the city
-     * @param city
-     */
+        * Set the city
+        * @param city
+        */
 	public void setCity(String city){
 		this.city=city;
 	}
 	
 	/**
-     * Returns the prepared response
-     * @return response
-     */
+        * Returns the prepared response
+        * @return response
+        */
 	public String getResponse(){
 		if(response!=null){
 			return response;

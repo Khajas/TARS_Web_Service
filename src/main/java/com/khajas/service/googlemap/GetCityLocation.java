@@ -45,15 +45,17 @@ public class GetCityLocation extends ApiCall{
          * Process the request by calling the URL for google maps API
          * and prepare the response, it also makes a call to super class
          * method to get the JSON response.
+         * @return 
          */
-	public void processRequest(){
+        @Override
+	public String processRequest(String query){
 		URL url;
 		try {
 			String userCity=URLEncoder.encode(this.city,"UTF-8");
 			url = new URL("http://maps.googleapis.com/maps/api/geocode/json?address="+userCity+"&sensor=false");
 		} catch (MalformedURLException | UnsupportedEncodingException e) {
 			response=e.getMessage();
-			return;
+			return response;
 		}
 		JSONObject json;
 		try {
@@ -64,9 +66,10 @@ public class GetCityLocation extends ApiCall{
 					getJSONObject("location").getString("lng");
 		} catch (IOException | JSONException e) {
 			response=e.getMessage();
-			return;
+			return response;
 		}
 		response="Lat: "+latitude+" lng: "+longitude+"city: "+city;
+                return response;
 	}
 
 	/**
@@ -93,8 +96,7 @@ public class GetCityLocation extends ApiCall{
          */
 	@Override
 	public String serve(String append) {
-		this.processRequest();
-		return response;
+		return this.processRequest(""); // No query input needed
 	}
 }
 /////////////////////	END OF SOURCE FILE	////////////////////////////////////////

@@ -22,7 +22,7 @@ public final class LocationService extends ApiCall{
 	private String lat, lng;
 	public LocationService(String ipaddress){
 			this.userIP=ipaddress;
-			this.findCity(this.userIP);
+			this.processRequest(this.userIP);
 			super.addIntent("what's my location", "locationservice","You're location in ");
 			super.addIntent("my location", "locationservice","It seems you're in ");
 			super.addIntent("where am I now", "locationservice","I guess you're at ");
@@ -33,22 +33,24 @@ public final class LocationService extends ApiCall{
 	 * This method accepts ip address of the user to determine location
 	 * what if there are many users acccess the api ?
 	 * @param ipaddress 
+         * @return  
 	 */
-	public void findCity(String ipaddress){
+        @Override
+	public String processRequest(String ipaddress){
         URL url;
 		try {
 			url = new URL("https://ipinfo.io/"+URLEncoder.encode(ipaddress,"UTF-8")
 							+"/json");
 		} catch (MalformedURLException | UnsupportedEncodingException e) {
 			this.userCity=this.userCountry="unknown";
-			return;
+			return "";
 		}
 		JSONObject json;
 		try {
 			json = super.getJsonObject(url);
 		} catch (IOException | JSONException e) {
 			this.userCity=this.userCountry="unknown";
-			return;
+			return "";
 		}
 		try {
 			this.userCity=json.getString("city");
@@ -62,10 +64,11 @@ public final class LocationService extends ApiCall{
 		} catch (JSONException e) {
 			this.userCity=this.userCountry="unknown";
 		}
+                return "";
 	}
 	@Override
 	public String serve(String append){
-		findCity(this.userIP);
+		this.processRequest(this.userIP);
 		return append+this.userCity+", "+this.userState+" "+this.userCountry+".";
 	}
 	
