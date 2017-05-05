@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2017 Anwar.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Anwar - initial API and implementation and/or initial documentation
+ */
 package com.khajas.service.news;
 
 import java.io.IOException;
@@ -10,12 +20,18 @@ import org.json.JSONObject;
 
 import com.khajas.service.ApiCall;
 
-// The new api
-// Api key: 3e39b401637643cca15decf66d9bcfb0
-// Doc: https://newsapi.org/sources
+/**
+ * Supports news skills, it calls news api registered as
+ * Api key: 3e39b401637643cca15decf66d9bcfb0
+ * Doc: https://newsapi.org/sources
+ * @author - Anwar
+ */
 
 public class NewsApi extends ApiCall{
 	private String newslocation="local";
+	/**
+	 * Constructor for NewsApi
+	 */
 	public NewsApi(){
 		// Local news
 		super.addIntent("what's local news ", "localnews", "Local Headlines: ");
@@ -50,6 +66,14 @@ public class NewsApi extends ApiCall{
 		super.addIntent("news sports ", "sportsnews", "Sports Headlines: ");
 	}
 
+	/**
+     * Process the request by calling the URL for currency api
+     * and prepare the response, it also makes a call to super class-
+     * method to get the JSON response.
+     * @throws JSONException 
+	 * @throws IOException 
+	 * @throws MalformedURLException
+	 */
 	private String processRequest(){
 		String response="";
 		URL url = null;
@@ -68,29 +92,40 @@ public class NewsApi extends ApiCall{
 					+ "source=the-hindu&sortBy=top&apiKey=3e39b401637643cca15decf66d9bcfb0");
 		} catch (MalformedURLException e) {
 			response=e.getMessage();
-			return "";
+                        return response;
 		}
-		JSONObject json = null;
+		JSONObject json;
 		try {
-			json = super.callApi(url);
+			json = super.getJsonObject(url);
 			JSONArray arr=json.getJSONArray("articles");
 			System.out.println(json.toString());
 			for(int i=0;i<arr.length();++i){
 				response+=(arr.getJSONObject(i).getString("title")+"\n");
 			}
 		} catch (IOException | JSONException e) {
-			response=e.getMessage();
-			return "Can't parse JSON";
+//			response=e.getMessage();
+			return "Can't parse JSON!";
 		}
 		return response;
 	}
 	
+	/**
+	 * Set the location, which may used in future
+	 * @param loc
+	 */
 	public void setNewsLocation(String loc){
 		this.newslocation=loc;
 	}
 	
+	/**
+     * Makes a call to request processor( method processRequest())
+     * and returns the response appended by the 'append' parameter.
+     * @param append
+     * @return response
+     */
 	@Override
 	public String serve(String append) {
 		return append+"\n"+this.processRequest();
 	}
 }
+///////////////////////		END OF SOURCE FILE	///////////////////////////////

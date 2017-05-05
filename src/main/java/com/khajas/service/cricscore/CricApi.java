@@ -1,20 +1,37 @@
+/*
+ * Copyright (c) 2017 Anwar.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Anwar - initial API and implementation and/or initial documentation
+ */
 package com.khajas.service.cricscore;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.khajas.service.ApiCall;
 
+/**
+ * Supports cricket scores skills, it calls cricscore api from
+ * http://cricscore-api.appspot.com
+ * @author - Anwar
+ */
 public class CricApi extends ApiCall{
 	private String response;
-	private ArrayList<String> teams;
+	private final ArrayList<String> teams;
+	/**
+     * Constructor for cricket scores api
+     */
+	@SuppressWarnings("serial")
 	public CricApi(){
 		super.addIntent("ipl score ", "iplscore", "");
 		super.addIntent("ipl ", "iplscore", "");
@@ -35,6 +52,11 @@ public class CricApi extends ApiCall{
 				}};
 	}
 	
+	/**
+        * Process the request by calling the URL for currency api
+        * and prepare the response, it also makes a call to super class-
+        * method to get the JSON response.
+        */
 	public void getAllCricScores(){
 		response="testing";
 		URL url;
@@ -66,16 +88,20 @@ public class CricApi extends ApiCall{
 			else response="There are no ipl matches today!";
 		} catch (MalformedURLException e) {
 			response=e.getMessage();
-		} catch (IOException e) {
-			response=e.getMessage();
-		} catch (JSONException e) {
+		} catch (IOException | JSONException e) {
 			response=e.getMessage();
 		}
 	}
-	
+	 /**
+     * Makes a call to request processor( method processRequest())
+     * and returns the response appended by the 'append' parameter.
+     * @param append
+     * @return response
+     */
 	@Override
 	public String serve(String append) {
 		this.getAllCricScores();
 		return response;
 	}
 }
+///////////////////////         END OF SOURCE FILE      //////////////////////////

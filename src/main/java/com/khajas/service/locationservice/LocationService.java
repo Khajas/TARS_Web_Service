@@ -12,8 +12,8 @@ import org.json.JSONObject;
 import com.khajas.service.ApiCall;
 
 // Will get the user location based of the request from an ip address
-public class LocationService extends ApiCall{
-	private String userIP;
+public final class LocationService extends ApiCall{
+	private final String userIP;
 	private String userCity;
 	private String userCountry;
 	private String zipcode;
@@ -27,15 +27,12 @@ public class LocationService extends ApiCall{
 			super.addIntent("my location", "locationservice","It seems you're in ");
 			super.addIntent("where am I now", "locationservice","I guess you're at ");
 			super.addIntent("where am I located", "locationservice","I guess you're at ");
-			super.print_commands();
+			ApiCall.print_commands();
 	}
 	/**
 	 * This method accepts ip address of the user to determine location
 	 * what if there are many users acccess the api ?
-	 * @param ipaddress
-	 * @return user city and country
-	 * @throws JSONException 
-	 * @throws IOException 
+	 * @param ipaddress 
 	 */
 	public void findCity(String ipaddress){
         URL url;
@@ -48,7 +45,7 @@ public class LocationService extends ApiCall{
 		}
 		JSONObject json;
 		try {
-			json = super.callApi(url);
+			json = super.getJsonObject(url);
 		} catch (IOException | JSONException e) {
 			this.userCity=this.userCountry="unknown";
 			return;
