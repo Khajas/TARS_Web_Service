@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2017 Anwar.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Anwar - initial API and implementation and/or initial documentation
+ */
 package com.khajas.service.wiki;
 
 import java.util.Iterator;
@@ -11,10 +21,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.khajas.service.ApiCall;
+/**
+ * Supports quering the wikipedia, it calls wikipedia api
+ * @author - Anwar
+ */
 
 public class WikiApi extends ApiCall{
 	private String query;
 	public boolean status=true;
+	
+	/**
+     * Constructor for wikipedia querying skill
+     */
 	public WikiApi(){
 		super.addIntent("What's ", "wikiapi", "");
 		super.addIntent("What's a ", "wikiapi", "");
@@ -27,10 +45,23 @@ public class WikiApi extends ApiCall{
 		super.addIntent("Who is of ", "wikiapi", "");
 		super.addIntent("Who is the ", "wikiapi", "");
 	}
+
+	/**
+     * Constructor for wikipedia querying skill
+	 * @param query
+     */
 	public WikiApi(String query){
 		this();
 		this.query=query;
 	}
+
+	/**
+     * Process the request by calling the URL for currency API
+     * and prepare the response, it also makes a call to super class-
+     * method to get the JSON response.
+     * @param query
+     * @return response
+     */
 	public String processRequest(String query){
 		System.out.println("Processing request for :"+query);
 	try {
@@ -39,7 +70,7 @@ public class WikiApi extends ApiCall{
         		+ "&prop=extracts&exintro=&redirects=true&explaintext=&titles="+query);
 		JSONObject json;
 		try {
-			json = super.callApi(url);
+			json = super.getJsonObject(url);
 			String str="";
 			json=json.getJSONObject("query").getJSONObject("pages");
 			Iterator<?> itr=json.keys();
@@ -48,7 +79,7 @@ public class WikiApi extends ApiCall{
 			    str=name.getString("extract");
 			}
     		str=str.replace(".\\n", ".\r\n");
-            str=str.replace("\\n", "\r\n");
+                str=str.replace("\\n", "\r\n");
     		System.out.println(" String searched: "+str);
     		return str;
 		}catch (JSONException e) {
@@ -63,11 +94,23 @@ public class WikiApi extends ApiCall{
 		  return "You may check your request!";
 	  }
 	}
+	
+	/**
+     * Makes a call to request processor( method processRequest())
+     * and returns the response appended by the 'append' parameter.
+     * @param append
+     * @return response
+     */
 	@Override
 	public String serve(String append){
 			return this.processRequest(this.query);
 	}
+	/**
+	 * Sets the query
+	 * @param query
+	 */
 	public void setQuery(String query) {
 		this.query=query;
 	}
 }
+/////////////////////	END OF SOURCE FILE	////////////////////////////////////
