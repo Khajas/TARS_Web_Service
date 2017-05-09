@@ -37,9 +37,7 @@ public class CricApi extends ApiCall{
 		super.addIntent("ipl ", "iplscore", "");
 		super.addIntent("Indian Premier League ", "iplscore", "");
 		super.addIntent("t20 score ", "iplscore", "");
-		super.addIntent("show me t20 ", "iplscore", "");
-		super.addIntent("give me t20 ", "iplscore", "");
-		super.addIntent("let's see t20 ", "iplscore", "");
+		super.addIntent("t20 ", "iplscore", "");
 		teams=new ArrayList<String>(){
 				{	add("Delhi Daredevils");
 				 	add("Gujarat Lions");
