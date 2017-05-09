@@ -52,11 +52,13 @@ public class WeatherInfo extends ApiCall{
 	        super.addIntent("weather of ", "weatherinforemote", "It's ");
 	        super.addIntent("forecast of ", "weatherinforemote", "It's ");
 	
-	        super.addIntent("What's today's temperature in ", "weatherinforemote", "It's ");
+	       super.addIntent("What's today's temperature in ", "weatherinforemote", "It's ");
 	       super.addIntent("What's today's temperature of ", "weatherinforemote", "It's ");
 	       super.addIntent("How is temperature in ", "weatherinforemote", "It's ");
 	       super.addIntent("temperature in ", "weatherinforemote", "It's ");
 	       super.addIntent("temperature of ", "weatherinforemote", "It's ");
+	       super.addIntent("give me weather information ", "weatherinforemote", "It's ");
+	       super.addIntent("show me weather information ", "weatherinforemote", "It's ");
 	}
 	
 	 /**

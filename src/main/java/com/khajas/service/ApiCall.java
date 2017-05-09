@@ -142,6 +142,7 @@ public abstract class ApiCall {
 			if(score>highscore) highscore=score;
 			intentScore.put(i, score);						// Put the intent and it's score
 		}
+		System.out.println("Highes score: "+highscore);
 		for(Entry<Intents,Double> e: intentScore.entrySet()){
 			if((e.getValue()==highscore) && (highscore>=fidelity))			// Find the intent with high score
 				return e.getKey();						// and if it's above the fidelity
@@ -160,7 +161,7 @@ public abstract class ApiCall {
 	}
 	*/
         
-        /**
+    /**
 	 * Returns the response after processing the response received from API
 	 * by appending the response with 'append' parameter.
 	 * @param append
@@ -168,11 +169,11 @@ public abstract class ApiCall {
 	 */
 	public abstract String serve(String append);
         
-        /**
-         * Process user request and returns response
-         * @param query
-         * @return 
-         */
-        public abstract String processRequest(String query);
+    /**
+     * Process user request and returns response
+     * @param query
+     * @return 
+     */
+    public abstract String processRequest(String query);
 }
 //////////////////////////	END OF SOURCE FILE	///////////////////////////////////////
