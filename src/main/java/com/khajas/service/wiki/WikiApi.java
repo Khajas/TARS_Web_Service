@@ -22,7 +22,7 @@ import org.json.JSONObject;
 
 import com.khajas.service.ApiCall;
 /**
- * Supports quering the wikipedia, it calls wikipedia api
+ * Supports quering the wikipedia, it calls wikipedia API
  * @author - Anwar
  */
 
@@ -31,7 +31,7 @@ public class WikiApi extends ApiCall{
 	public boolean status=true;
 	
 	/**
-     * Constructor for wikipedia querying skill
+     * Constructor for Wikipedia querying skill
      */
 	public WikiApi(){
 		super.addIntent("What's ", "wikiapi", "");
