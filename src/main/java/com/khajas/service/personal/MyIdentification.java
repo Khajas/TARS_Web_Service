@@ -52,6 +52,7 @@ public class MyIdentification extends ApiCall{
 		super.addIntent("I'm doing great ", "me", "Wonderful!");
 		super.addIntent("I'm good ", "me", "Wonderful!");
 		super.addIntent("I'm fine ", "me", "Wonderful!");
+		super.addIntent("fine ", "me", "Okay!");
 		
 		super.addIntent("sorry ", "me", "It's alright!");
 		super.addIntent("thank you ", "me", "anytime");
