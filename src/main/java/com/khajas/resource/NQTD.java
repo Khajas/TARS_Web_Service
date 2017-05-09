@@ -115,28 +115,34 @@ public class NQTD {
 		String query_words=ner.getEnglishEntity();			// Get the query words(words that are present in any of the intent commands)
 		if(query_words.isEmpty()){
 			String search=ner.getNamedEntity();			// If there are no query words, get the unrecognized or named words
-			search=search.replaceAll(" ", "+");			// Replace all the '+' with ' ' to recover the string from URL format
 			search=search.substring(0, search.length()-1);		// To avoid the last ' ' contained in the string
-			String regex="[\\d]+[+*%/-]+[\\d]+";			// Regex to detect mathematical expressions	
+			String regex="[\\d]+(([\\+\\*\\%\\/\\-xX])"
+					+ "|(plus)|(minus)|(times))+[\\d]+";			// Regular Expression to detect mathematical expressions
+			search=search.replaceAll("plus", "+");
+			search=search.replaceAll("minus", "-");
+			search=search.replaceAll("times", "*");
+			search=search.replaceAll("[xX]", "*");			// Exception if user says 10 X 2 instead of 10*20
+			search=search.replaceAll("[ ]([\\+\\*\\%\\/\\-])[ ]", "$1");	// If it's voice enabled, there will be extra space( this can handle 1+1 and 1 + 1 as well)			
 			Pattern pattern=Pattern.compile(regex);
 			Matcher m = pattern.matcher(search);
 			if(m.find()){
-				ma.setQuery(search);				// If it's a mathematical expression call serve() on maths api
+				ma.setQuery(search);					// If it's a mathematical expression call serve() on Maths API
+				System.out.println("Regex Find to be a Maths Expression");
 				response=ma.serve(" ");
-//				return response;
+				return response;
 			}
 			else{
 				String wikiResponse;
-				search=search.replaceAll(" ","");		// Remove all spaces to make the URL format for wiki api
+				search=search.replaceAll(" ","");		// Remove all spaces to make the URL format for Wiki Api
 				System.out.println("Wiki querying: "+search);
 				wa.setQuery(search);
 				wikiResponse=processString(wa.serve(""));
 				if(!wa.status){					// If there is no proper response from wiki, make all upper case letters
-					wa.setQuery(search.toUpperCase());	// eg: It may be an abreviation(AIMIM)
+					wa.setQuery(search.toUpperCase());	// eg: It may be an abbreviation(AIMIM)
 					wikiResponse=processString(wa.serve(""));
 				}
 				this.response=wikiResponse;
-//				return response;
+				return response;
 			}
 		}
 		// Resolve the query to get the type of skill of intent
@@ -227,6 +233,12 @@ public class NQTD {
 		}
 		processed_response=processed_response.replaceAll("[ ]+", " ");
 		return processed_response;
+	}
+	/**
+	 *  Set the query to faciliate testing
+	 */
+	public void setQuery(String query){
+		this.query=query;
 	}
 }
 ////////////////////////////	END OF SOURCE FILE	//////////////////////////////////////

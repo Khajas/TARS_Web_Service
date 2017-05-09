@@ -39,7 +39,8 @@ public class NewsApi extends ApiCall{
 		super.addIntent("what's local headlines ", "localnews", "Local Headlines: ");
 		super.addIntent("what's today's headlines ", "localnews", "Local Headlines: ");
 		super.addIntent("headlines ", "localnews", "Local Headlines: ");
-		super.addIntent("news ", "localnews", "Local Headlines: ");
+		super.addIntent("show me news ", "localnews", "Local Headlines: ");
+		super.addIntent("news headlines ", "localnews", "Local Headlines: ");
 		// Indian News
 		super.addIntent("what's indian news", "indiannews", "Indian Headlines: ");
 		super.addIntent("what's indian news headlines", "indiannews", "Indian Headlines: ");
@@ -50,6 +51,7 @@ public class NewsApi extends ApiCall{
 		super.addIntent("headlines of india", "indiannews", "Indian Headlines: ");
 		super.addIntent("indian headlines", "indiannews", "Indian Headlines: ");
 		super.addIntent("news of india", "indiannews", "Indian Headlines: ");
+		super.addIntent("Indian news headlines ", "indiannews", "Indian Headlines: ");
 		// Technical news
 		super.addIntent("what's technical news ", "technicalnews", "Technical Headlines: ");
 		super.addIntent("what's today's technical news ", "technicalnews", "Technical Headlines: ");
@@ -57,6 +59,7 @@ public class NewsApi extends ApiCall{
 		super.addIntent("what's today's technical headlines ", "technicalnews", "Technical Headlines: ");
 		super.addIntent("headlines technical ", "technicalnews", "Technical Headlines: ");
 		super.addIntent("news technical ", "technicalnews", "Technical Headlines: ");
+		super.addIntent("technical news headlines ", "technicalnews", "Technical Headlines: ");
 		// Sports news
 		super.addIntent("what's sports news ", "sportsnews", "Sports Headlines: ");
 		super.addIntent("what's today's sports news ", "sportsnews", "Sports Headlines: ");
@@ -64,6 +67,8 @@ public class NewsApi extends ApiCall{
 		super.addIntent("what's today's sports headlines ", "sportsnews", "Sports Headlines: ");
 		super.addIntent("headlines sports ", "sportsnews", "Sports Headlines: ");
 		super.addIntent("news sports ", "sportsnews", "Sports Headlines: ");
+		super.addIntent("news headlines sports ", "sportsnews", "Sports Headlines: ");
+		
 	}
 
     /**

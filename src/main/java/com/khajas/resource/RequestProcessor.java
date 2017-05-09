@@ -39,7 +39,7 @@ public class RequestProcessor{
 					@PathParam("queryString") String query) 
 						throws ClientProtocolException, IOException{
 		userIP=requestContext.getRemoteAddr();		// Get user ip address
-		query=query.replaceAll("\\+"," ");		// Replace all the + from query
+		query=query.replaceAll("_"," ");		// Replace all the + from query
 		userIP=requestContext.getRemoteAddr();		// Let's use this IP for geo location mapping
 		if(userIP.contains("127.0")) 			// If it's local executed, let's make the IP as my default router's IP
 			userIP="2601:242:4000:be10:1acf:5eff:fedc:9a68";
