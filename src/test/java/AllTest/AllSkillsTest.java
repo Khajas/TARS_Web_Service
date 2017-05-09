@@ -48,11 +48,7 @@ public class AllSkillsTest {
 		qt.setQuery("1$");
 		String actual=qt.detectServiceType();
 		CurrencyApi ca=new CurrencyApi("USD");
-<<<<<<< HEAD
-		String expected=ca.serve("");
-=======
 		String expected=ca.serve("1 USD: ");
->>>>>>> origin/master
 		Assert.assertEquals(expected, actual);
 	}
 }
