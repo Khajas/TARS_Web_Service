@@ -1,0 +1,13 @@
+com.khajas.resource
+com.khajas.service
+com.khajas.service.cricscore
+com.khajas.service.currency
+com.khajas.service.globaldatetime
+com.khajas.service.googlemap
+com.khajas.service.locationservice
+com.khajas.service.maths
+com.khajas.service.news
+com.khajas.service.personal
+com.khajas.service.spellhandler
+com.khajas.service.weatherinfo
+com.khajas.service.wiki

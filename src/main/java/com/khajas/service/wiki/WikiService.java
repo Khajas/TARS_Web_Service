@@ -27,10 +27,26 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
+/**
+ * 
+ * @author Anwar
+ *
+ */
+@Deprecated
 public class WikiService {
 	private boolean hints=false;
 	private boolean showFullPage;
+	/**
+	 * Constructor for wikiResponse API
+	 * @param query
+	 * 		User query.
+	 * @return processedResponse
+	 * 		Returns processed string after querying the wikipedia
+	 * @throws ClientProtocolException
+	 * 		Signals an error in the HTTP protocol.
+	 * @throws IOException
+	 * 		Signals that an I/O exception of some sort has occurred.
+	 */
 	public String wikiResponse(String query) throws ClientProtocolException, IOException{
 		final CloseableHttpClient client = HttpClients.createDefault();
 		String processedQuery=processQuery(query);
@@ -46,53 +62,59 @@ public class WikiService {
         	System.out.println(IOUtils.toString(responseBody));
         Document doc = Jsoup.parse(IOUtils.toString(responseBody));
         Elements head = doc.select("p");
-        String clean=null;
+        String processedResponse=null;
         int count=0;
         for(Element e: head){
-	        clean=processResponse(e.text()+"\n");
-	        if(clean.startsWith("Coordinates"))
+        	processedResponse=processResponse(e.text()+"\n");
+	        if(processedResponse.startsWith("Coordinates"))
 	        	continue;
-	        System.out.println(clean); ++count;
-	        if(clean.contains("may refer to") || clean.contains("most often refers"))
-	            	return clean+=getLiTags(doc);
+	        System.out.println(processedResponse); ++count;
+	        if(processedResponse.contains("may refer to") || processedResponse.contains("most often refers"))
+	            	return processedResponse+=getLiTags(doc);
 	        if(count==1) break;
         }
         client.close();
-		return clean;
+		return processedResponse;
 	}
 	/**
 	 * This method is invoked if a tag refers to a list of possibilities
-	 * @param doc
-	 * @return cleanString
+	 * @param document
+	 * 		Document datatype that should be parsed for extracting the data.
+	 * @return processedResponse
+	 * 		Returns response after processing the document.
 	 */
-	private String getLiTags(Document doc){
-		String clean="";
-		Elements head=doc.select("li");
+	private String getLiTags(Document document){
+		String processedResponse="";
+		Elements head=document.select("li");
 		int count=0;
 		for(Element e: head){
-	        clean+= processResponse(e.text()+"\n");
-	        System.out.println(clean);
+			processedResponse+= processResponse(e.text()+"\n");
+	        System.out.println(processedResponse);
 	        count++;
 	        if(count==3) break;	// Display top three items from the list
 		}
-		return clean;
+		return processedResponse;
 	}
 	
 	/**
 	 * This method takes a raw response and returns a processed reponse
-	 * @param responseString
-	 * @return process string
+	 * @param partialProcessedResponse
+	 * 		Takes partial processed string that might contain '\n' or special characters.
+	 * @return processedString
+	 * 		Returns processed string after removing special characters.
 	 */
-	private String processResponse(String responseString){
-        String cleanString = responseString.replaceAll("\\(.*?\\)","");    	// Remove anything between ()
-        cleanString = cleanString.replaceAll("\\[.*?\\]", "");          	// Remove anything between []
-        cleanString = cleanString.replaceAll("\\. ", ".\n");          		// Give newline to each string
-        return cleanString;
+	private String processResponse(String partialProcessedResponse){
+        String processedString = partialProcessedResponse.replaceAll("\\(.*?\\)","");    	// Remove anything between ()
+        processedString = processedString.replaceAll("\\[.*?\\]", "");          	// Remove anything between []
+        processedString = processedString.replaceAll("\\. ", ".\n");          		// Give newline to each string
+        return processedString;
 	}
 	/**
 	 * This method takes a raw query and returns a searchable query by replaces spaces with + signs
 	 * @param rawQuery
+	 * 		Raw query that is googled to get the acutal link for wikipedia
 	 * @return GoogleSearchabelQuery
+	 * 		Returns google searchable query.
 	 */
 	private String processQuery(String rawQuery){
 		String searchableQuery="wiki+";
@@ -102,9 +124,14 @@ public class WikiService {
 	}
 	/**
 	 * This method takes a query parameter and returns the link to it's wiki page
+	 * @param searchableQuery
+	 * 		A query string(with FQDN) that could be called by HTTP connection.
 	 * @return linkToWiki
-	 * @throws IOException 
-	 * @throws ClientProtocolException 
+	 * 		HTTP link to wikipedia.
+	 * @throws IOException
+	 * 		Signals that an I/O exception of some sort has occurred.
+	 * @throws ClientProtocolException
+	 * 		Signals an error in the HTTP protocol. 
 	 */
 	private String getWikiLink(String searchableQuery) throws ClientProtocolException, IOException{
 		String linkToWiki=null;
@@ -122,7 +149,9 @@ public class WikiService {
 	/**
 	 * This method is invoked over the response from google
 	 * @param responseBody
-	 * @return extracted link of wikipedia
+	 * 		Takes response body for after searching google.
+	 * @return extractedLinkOfWikipedia
+	 * 		Returns link extracted from the search page
 	 */
 	private String extractWiki(String responseBody){
 		String pattern="https\\:\\/\\/en\\.wikipedia\\.org\\/wiki\\/([a-zA-Z_-]*)";
@@ -135,3 +164,4 @@ public class WikiService {
 		return m.group(0).toString();
 	}
 }
+/////////////////////	END OF SOURCE FILE		////////////////////////////

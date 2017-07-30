@@ -34,21 +34,13 @@ public class WikiApi extends ApiCall{
      * Constructor for Wikipedia querying skill
      */
 	public WikiApi(){
-		super.addIntent("What's ", "wikiapi", "");
-		super.addIntent("What's a ", "wikiapi", "");
-		super.addIntent("What is ", "wikiapi", "");
-		super.addIntent("What is a ", "wikiapi", "");
-		super.addIntent("What do you mean by ", "wikiapi", "");
-		super.addIntent("means ", "wikiapi", "");
-		super.addIntent("Who is ", "wikiapi", "");
-		//Exceptional Intent, adding "of" eg: Who is the president of United States
-		super.addIntent("Who is of ", "wikiapi", "");
-		super.addIntent("Who is the ", "wikiapi", "");
+		super.addIntent("What do you mean by", "wikiapi", "");
 	}
 
 	/**
      * Constructor for wikipedia querying skill
 	 * @param query
+	 * 		User query
      */
 	public WikiApi(String query){
 		this();
@@ -60,7 +52,9 @@ public class WikiApi extends ApiCall{
      * and prepare the response, it also makes a call to super class-
      * method to get the JSON response.
      * @param query
+     * 		User query.
      * @return response
+     * 		Response for the given query.
      */
 	public String processRequest(String query){
 		System.out.println("Processing request for :"+query);
@@ -99,7 +93,9 @@ public class WikiApi extends ApiCall{
      * Makes a call to request processor( method processRequest())
      * and returns the response appended by the 'append' parameter.
      * @param append
+     * 		A customized string that could be appended to response.
      * @return response
+     * 		Response for the given query.
      */
 	@Override
 	public String serve(String append){
@@ -108,6 +104,7 @@ public class WikiApi extends ApiCall{
 	/**
 	 * Sets the query
 	 * @param query
+	 * 		User query.
 	 */
 	public void setQuery(String query) {
 		this.query=query;

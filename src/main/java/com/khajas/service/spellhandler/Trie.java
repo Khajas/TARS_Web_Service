@@ -1,7 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2017 Anwar.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Anwar - initial API and implementation and/or initial documentation
  */
 package com.khajas.service.spellhandler;
 
@@ -18,8 +23,10 @@ public class Trie {
     }
     /**
     * Method to add a word to a Trie
-    * @param word: word to be added
-    * @return true if the word is added, else false
+    * @param word
+    * 		Word that needs to be added
+    * @return boolean
+    * 		True if the word is added, else false
     */
     public boolean addWord(String word){
         Node n=root;
@@ -33,45 +40,80 @@ public class Trie {
         else return false;
         return true;
     }
-    
+    /**
+     * Validates a word if it contains all English letters(excluding symbols), checks character by character.
+     * @param word
+     * 		Word that needs to be validated.
+     * @return boolean
+     * 		True if a word is valid else false.
+     */
     private boolean validateWord(String word){
         for(int i=0;i<word.length();++i)
             if(!Character.isAlphabetic(word.charAt(i)))
                 return false;
         return true;
     }
-    
+    /**
+     * Check if a word is spelled correctly
+     * @param word
+     * 		Word that needs to be checked.
+     * @return boolean
+     * 		True if a word is valid else false.
+     */
     public boolean isValidEnglishWord(String word){
     	if(!validateWord(word)) return false;
     	String result=this.getSuggestion(word);
     	return result.equals("CompleteWord");
     }
     
-    private void printEachWord(Node n, String word_so_far){
-        if(n==null){
+    /**
+     * Prints each word from a given node
+     * @param node
+     * 		Node from which all the possible words will be printed.
+     * @param word_so_far
+     * 		Word's printed so far, any child nodes will be appended to get the new word formed by the child node.
+     */
+    @Deprecated
+    private void printEachWord(Node node, String word_so_far){
+        if(node==null){
             return;
         }
-        if(n.getChar()=='*'){
+        if(node.getChar()=='*'){
             System.out.println(word_so_far);
             return;
         }
-        ArrayList<Node> arr=n.getAllChildNodes();
+        ArrayList<Node> arr=node.getAllChildNodes();
         for(Node nn: arr){
             if(nn!=null && nn.getChar()!='*')
                 printEachWord(nn,word_so_far+nn.getChar());
             else printEachWord(nn,word_so_far);
         }
     }
-    
+    /**
+     * Print each word from the start(prints all words)
+     * @param word_so_far
+     * 		Word formed so far.
+     */
+    @Deprecated
     public void printEachWord(String word_so_far){
         this.printEachWord(root, word_so_far);
     }
-    
+    /**
+     * Gives word suggestions for a partial word.
+     * Checks if a word is spelled correctly.
+     * Checks if a word is complete.
+     * @param word
+     * 		Word that needs checking.
+     * @return test_result
+     * 		Returns test results.
+     */
     public String getSuggestion(String word){
+    	System.out.println("Checking for word:"+word+".");
         if(word==null || word.isEmpty()) return new String("Empty String");
         Node n=root;
         for(int i=0;i<word.length();++i){
             char ch=word.charAt(i);
+            System.out.println("Checking for character: "+ch+".");
             if(n.hasChild(ch)){
                 n=n.getNode(ch);
             }
@@ -92,3 +134,4 @@ public class Trie {
         }
     }
 }
+///////////////////////		END OF SOURCE FILE	//////////////////////////

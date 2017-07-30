@@ -20,20 +20,25 @@ public final class LocationService extends ApiCall{
 	private String countryCode;
 	private String userState;
 	private String lat, lng;
+	/**
+	 * Constructor for LocationService class.
+	 * @param ipaddress
+	 * 		Takes ipaddress of the user/cleint contacting TARS web service.
+	 */
 	public LocationService(String ipaddress){
 			this.userIP=ipaddress;
 			this.processRequest(this.userIP);
-			super.addIntent("what's my location", "locationservice","You're location in ");
-			super.addIntent("my location", "locationservice","It seems you're in ");
+			super.addIntent("my location", "locationservice","You're location is ");
 			super.addIntent("where am I now", "locationservice","I guess you're at ");
 			super.addIntent("where am I located", "locationservice","I guess you're at ");
-			ApiCall.print_commands();
+	//		ApiCall.print_commands();
 	}
 	/**
 	 * This method accepts ip address of the user to determine location
-	 * what if there are many users acccess the api ?
-	 * @param ipaddress 
-         * @return  
+	 * @param ipaddress
+	 * 		IpAddress of the user/client contacting the TARS web service 
+     * @return response
+     * 		Response after processing user request.
 	 */
         @Override
 	public String processRequest(String ipaddress){
@@ -64,8 +69,16 @@ public final class LocationService extends ApiCall{
 		} catch (JSONException e) {
 			this.userCity=this.userCountry="unknown";
 		}
-                return "";
+        return "";
 	}
+    /**
+     * Makes a call to request processor( method processRequest())
+     * and returns the response appended by the 'append' parameter.
+	 * @param append
+	 * 		A customized string that could be appended to response.
+	 * @return response
+	 * 		Response after processing user request.
+     */
 	@Override
 	public String serve(String append){
 		this.processRequest(this.userIP);

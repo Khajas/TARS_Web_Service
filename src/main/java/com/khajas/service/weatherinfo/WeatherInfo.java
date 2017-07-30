@@ -36,56 +36,37 @@ public class WeatherInfo extends ApiCall{
      */
 	public WeatherInfo(){
         	// Local Weather information
-	        super.addIntent("What's today's forecast ", "weatherinfo", "It's seems to be ");
-	        super.addIntent("What's today's weather ", "weatherinfo", "It's seems to be ");
-	        super.addIntent("Today's forecast ", "weatherinfo", "It's seems to be ");
-	        super.addIntent("Weather info ", "weatherinfo", "It's seems to be ");
-	        super.addIntent("weather ", "weatherinfo", "It's ");
-	        super.addIntent("forecast ", "weatherinfo", "It's ");
-	        // Remote Weather information
-	        super.addIntent("What's today's forecast in ", "weatherinforemote", "It's ");
-	        super.addIntent("What's today's weather in ", "weatherinforemote", "It's ");
-	        super.addIntent("What's today's forecast of ", "weatherinforemote", "It's ");
-	        super.addIntent("What's today's weather of ", "weatherinforemote", "It's ");
-	        super.addIntent("How is weather in ", "weatherinforemote", "It's ");
-	        super.addIntent("weather in ", "weatherinforemote", "It's ");
-	        super.addIntent("weather of ", "weatherinforemote", "It's ");
-	        super.addIntent("forecast of ", "weatherinforemote", "It's ");
-	
-	       super.addIntent("What's today's temperature in ", "weatherinforemote", "It's ");
-	       super.addIntent("What's today's temperature of ", "weatherinforemote", "It's ");
-	       super.addIntent("How is temperature in ", "weatherinforemote", "It's ");
-	       super.addIntent("temperature in ", "weatherinforemote", "It's ");
-	       super.addIntent("temperature of ", "weatherinforemote", "It's ");
-	       super.addIntent("give me weather information ", "weatherinforemote", "It's ");
-	       super.addIntent("show me weather information ", "weatherinforemote", "It's ");
+	        super.addIntent("Weather forecast", "weatherinfo", "It's seems to be ");
+	        super.addIntent("weather", "weatherinfo", "It's ");
+	        super.addIntent("forecast", "weatherinfo", "It's ");
 	}
-	
 	 /**
      * Constructor for weatherinfo using city other than user default(client IP's city)
      * @param city
+     * 		User city
      */
 	public WeatherInfo(String city){
 		this();
 		this.city=city;
 	}
-
 	 /**
      * Constructor for wetherinfo for zipcode, countrycode other than user default(client IP's city)
      * @param zipcode
+     * 		Zipcode of user/client.
      * @param countrycode
+     * 		Countrycode of user/client.
      */
 	public WeatherInfo(String zipcode, String countrycode){
 		this();
 		this.zipcode=zipcode;
 		this.countrycode=countrycode;
 	}
-	
 	/**
      * Process the request by calling the URL for weatherinfo api
      * and prepare the response, it also makes a call to super class-
      * method to get the JSON response. 
      * @return response
+     * 		Response for the given query.
      */
         @Override
 	public String processRequest(String query){		
@@ -123,7 +104,9 @@ public class WeatherInfo extends ApiCall{
      * Makes a call to request processor( method processRequest())
      * and returns the response appended by the 'append' parameter.
      * @param append
+     * 		A customized string that could be appended to response.
      * @return response
+     * 		Response for the given query.
      */
 	@Override
 	public String serve(String append){
@@ -135,6 +118,7 @@ public class WeatherInfo extends ApiCall{
 	/**
 	 * Returns the weather information
 	 * @return weatherinfo
+	 * 		Gives the weather information
 	 */
 	public String getWeatherInfo(){
 		if(this.response!=null)
@@ -145,6 +129,7 @@ public class WeatherInfo extends ApiCall{
 	/**
 	 * Set the city 
 	 * @param city
+	 * 		Any valid city in the world.
 	 */
 	public void setCity(String city) {
 		System.out.println("Setting city: "+city);
@@ -152,47 +137,3 @@ public class WeatherInfo extends ApiCall{
 	}
 }
 ///////////////////////		END OF SOURCE FILE	////////////////////////////////
-/** sample response
- *{
-    "coord": {
-        "lon": -88.75,
-        "lat": 41.93
-    },
-    "weather": [
-        {
-            "id": 800,
-            "main": "Clear",
-            "description": "clear sky",
-            "icon": "01n"
-        }
-    ],
-    "base": "stations",
-    "main": {
-        "temp": 283.52,
-        "pressure": 1021,
-        "humidity": 62,
-        "temp_min": 280.15,
-        "temp_max": 286.15
-    },
-    "visibility": 16093,
-    "wind": {
-        "speed": 4.1,
-        "deg": 50
-    },
-    "clouds": {
-        "all": 1
-    },
-    "dt": 1492481700,
-    "sys": {
-        "type": 1,
-        "id": 963,
-        "message": 0.0063,
-        "country": "US",
-        "sunrise": 1492513760,
-        "sunset": 1492562389
-    },
-    "id": 4889553,
-    "name": "DeKalb",
-    "cod": 200
-}
-*/

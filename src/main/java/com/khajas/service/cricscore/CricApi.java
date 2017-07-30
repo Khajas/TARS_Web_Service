@@ -33,11 +33,13 @@ public class CricApi extends ApiCall{
      */
 	@SuppressWarnings("serial")
 	public CricApi(){
-		super.addIntent("ipl score ", "iplscore", "");
-		super.addIntent("ipl ", "iplscore", "");
-		super.addIntent("Indian Premier League ", "iplscore", "");
-		super.addIntent("t20 score ", "iplscore", "");
-		super.addIntent("t20 ", "iplscore", "");
+		super.addIntent("ipl match score", "iplscore", "");
+		super.addIntent("ipl score", "iplscore", "");
+		super.addIntent("Indian Premier League score", "iplscore", "");
+		super.addIntent("t20 score", "iplscore", "");
+		super.addIntent("cricket match score", "iplscore", "");
+		super.addIntent("cricket score", "iplscore", "");
+		
 		teams=new ArrayList<String>(){
 				{	add("Delhi Daredevils");
 				 	add("Gujarat Lions");
@@ -51,11 +53,12 @@ public class CricApi extends ApiCall{
 	}
 	
 	/**
-        *  Gets all Cricket Scores by calling the URL for currency api
-        * and prepare the response, it also makes a call to super class-
-        * method to get the JSON response.
-        * @return 
-        */
+    *  Gets all Cricket Scores by calling the URL for currency api
+    * and prepare the response, it also makes a call to super class-
+    * method to get the JSON response.
+    * @return response
+    * 	Returns the response after processing the user request.
+    */
         @Override
 	public String processRequest(String query){
 		response="testing";
@@ -97,7 +100,9 @@ public class CricApi extends ApiCall{
      * Makes a call to request processor( method processRequest())
      * and returns the response appended by the 'append' parameter.
      * @param append
+     * 		A customized string that should be appended to response.
      * @return response
+     * 		Response after processing request from user.
      */
 	@Override
 	public String serve(String append) {

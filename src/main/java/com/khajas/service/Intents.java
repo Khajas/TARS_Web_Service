@@ -9,75 +9,80 @@
  *    Anwar - initial API and implementation and/or initial documentation
  */
 package com.khajas.service;
+
 /**
- * The following class is to capture properties of an intent( command, category, response)
- * @author - Anwar
+ * The following class is store an intent(a command, the category it belongs to
+ * and the response that should be appended to the result)
+ * @author Anwar
  */
 public class Intents {
-	private final String command;
-	private final String category;
-	private final String response;
-	// Common id that is shared among all the intents, it's not being using currently
-	private static int id;
-	/**
-	 * Constructor for Intents class
-	 * @param command
-	 * @param category
-	 * @param response
-	 */
-	public Intents(String command, String category, String response) {
-		super();
-		this.command = command;
-		this.category = category;
-		this.response=response;
-	}
-	
-	/**
-	 * Copy Constructor
-         * @param i
-	 */
-	public Intents(Intents i) {
-		this(i.getCommand(), i.getCategory(), i.getResponse());
-	}
-
+    private final String command;
+    private final String category;
+    private final String response;
+    private static int id;
     /**
-     * Returns the command
-     * @return command
+     * Constructor for Intents class
+     * @param command
+     *      A possible command to invoke the skill
+     * @param category
+     *      Category that given command belongs to
+     * @param response
+     *      Response that could be appended to the result received from API
      */
-	public String getCommand() {
-		return command;
-	}
-
+    public Intents(String command, String category, String response) {
+            super();
+            this.command = command;
+            this.category = category;
+            this.response=response;
+    }
     /**
-     * Returns the category
+     * Copy constructor
+     * @param intent
+     *      An object of intent class
+     */
+    public Intents(Intents intent) {
+            this(intent.getCommand(), intent.getCategory(), intent.getResponse());
+    }
+    /**
+     * Returns the command of an intent
+     * @return command 
+     *      The command belonging to this intent
+     */
+    public String getCommand() {
+            return command;
+    }
+    /**
+     * Returns the category of an intent
      * @return category
+     *      The category of this intent
      */
-	public String getCategory() {
-		return category;
-	}
-	
+    public String getCategory() {
+            return category;
+    }
     /**
-     * Returns the response(that should be appended)
+     * Returns the response of an intent
      * @return response
+     *      Response that could be appended if this intent is called
      */
-	public String getResponse(){
-		return this.response;
-	}
-
+    public String getResponse(){
+            return this.response;
+    }
     /**
-     * Returns id of an intent
+     * Returns the id of an intent
      * @return id
+     *      Static ID belonging to an intent
      */
-	public static int getId() {
-		return id;
-	}
-	
+    public static int getId() {
+            return id;
+    }
     /**
-     * Sets id to an intent
+     * Sets the id of an intent
      * @param id
+     *      ID for an intent
      */
-	public static void setId(int id) {
-		Intents.id = id;
-	}
+    @Deprecated
+    public static void setId(int id) {
+            Intents.id = id;
+    }
 }
-////////////////////	END OF SOURCE FILE	//////////////////////////////////
+/////////////////////// END OF SOURCE FILE  /////////////////

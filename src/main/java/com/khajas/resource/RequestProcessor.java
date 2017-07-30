@@ -35,7 +35,20 @@ public class RequestProcessor{
 	public String userIP;
 	@GET
 	@Path("/query/{queryString}")
-	public String wikiResponse(@Context HttpServletRequest requestContext,
+	/**
+	 * The first method that gets called when a user contacts TARS web service.
+	 * @param requestContext
+	 * 		Captures client details.
+	 * @param query
+	 * 		User query.
+	 * @return response
+	 * 		Response after processing user query
+	 * @throws ClientProtocolException
+	 * 		Signals an error in the HTTP protocol.
+	 * @throws IOException
+	 * 		Signals that an I/O exception of some sort has occurred.
+	 */
+	public String TARS_Response(@Context HttpServletRequest requestContext,
 					@PathParam("queryString") String query) 
 						throws ClientProtocolException, IOException{
 		userIP=requestContext.getRemoteAddr();		// Get user ip address
@@ -43,7 +56,8 @@ public class RequestProcessor{
 		userIP=requestContext.getRemoteAddr();		// Let's use this IP for geo location mapping
 		if(userIP.contains("127.0")) 			// If it's local executed, let's make the IP as my default router's IP
 			userIP="2601:242:4000:be10:1acf:5eff:fedc:9a68";
-		NQTD nqt=new NQTD(userIP, query);		// Detect the query type
+		System.out.println("Query before being passed to QueryTypeDetector: "+query);
+		QueryTypeDetector nqt=new QueryTypeDetector(userIP, query);		// Detect the query type
 		return nqt.detectServiceType();			// and return the response from the detected object
 	}
 }

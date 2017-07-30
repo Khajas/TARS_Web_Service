@@ -17,10 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -33,16 +30,19 @@ import org.json.JSONObject;
  * @author - Anwar
  */
 public abstract class ApiCall {
-
 	private static final ArrayList<Intents> INTENTS_ARRAY=new ArrayList<>();		// Collection of all intents from all skills so far
 	public static Set<String> intent_words=new HashSet<String>();		// Collection of all words belonging to skills
 	public static double fidelity= 0.4;					// fidelity score limit			
 	/**
 	 * Accepts the URL for an API, call the given url and returns the JSON object
-         * @param url
+     * @param url
+     * 		URL of API that should be called to resolve the user query.
 	 * @return JSONObject
-         * @throws java.io.IOException
-         * @throws org.json.JSONException
+	 * 		Returns an JSONObject(which is the result of contacting the given URL)
+     * @throws java.io.IOException
+     * 		Signals that an I/O exception of some sort has occurred.
+     * @throws org.json.JSONException
+     * 		Constructs a new runtime exception with the specified detail message.
 	 */
 	public JSONObject getJsonObject(URL url) throws IOException, JSONException{
         	HttpURLConnection conn = (HttpURLConnection) url.openConnection(); 
@@ -62,13 +62,17 @@ public abstract class ApiCall {
 		return new JSONObject(message);
 	}
 
-        /**
-         * Accepts the API URL, calls the API using the URL provided
-         * @param url
-         * @return JSONArray
-         * @throws java.io.IOException
-         * @throws org.json.JSONException
-         */
+    /**
+     * Accepts the API URL, calls the API using the URL provided
+     * @param url
+     * 		URL of API that should be called to resolve the user query.
+	 * @return JSONArray
+	 * 		Returns an JSONArray(which is the result of contacting the given URL)
+     * @throws java.io.IOException
+     * 		Signals that an I/O exception of some sort has occurred.
+     * @throws org.json.JSONException
+     * 		Constructs a new runtime exception with the specified detail message.
+	 */
 	public JSONArray getJSONArray(URL url) throws IOException, JSONException{
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection(); 
         	conn.setRequestMethod("GET");
@@ -89,30 +93,33 @@ public abstract class ApiCall {
 
 	/**
 	 * Let's the user set the fidelity( 0.0 fidelity value makes all unidentified search on Wikipedia)
-         * @param f
+     * @param fidelity
+     * 		Fidelity ratio, a higher ratio means greater match score is required.
 	 */
-	public void setFidelity(double f){
-		fidelity=f;
+	@Deprecated
+	@SuppressWarnings("static-access")
+	public void setFidelity(double fidelity){
+		this.fidelity=fidelity;
 	}
 	
 	/**
-	 * Adds a new intent to static intents collections, that is shared among all skills
-	 * @param command
-	 * @param category
-	 * @param response
-	 * @return add_status
-	 */
+     * Adds an intent to static intent_words array
+     * @param command
+     *      A possible command to invoke the skill
+     * @param category
+     *      Category that given command belongs to
+     * @param response
+     *      Response that could be appended to the result received from API
+     * @return boolean
+     *      Returns true if the intent has been added else returns false
+     */
 	public boolean addIntent(String command, String category, String response){
-//		if(!isValidIntent(command, category)) return false;	// It's an invalid intent
 		for(Intents i: INTENTS_ARRAY){
 				if(i.getCommand().equals(command))
 					return false; 			// Similar command already exists
 		}
 		INTENTS_ARRAY.add(new Intents(command.toLowerCase(),category.toLowerCase(), response));
-		String[] allwords=command.toLowerCase().split(" ");
-		for(String s: allwords){
-			intent_words.add(s);
-		}
+		intent_words.add(command.toLowerCase());
 		return true;
 	}
 
@@ -124,55 +131,43 @@ public abstract class ApiCall {
 		for(Intents i: INTENTS_ARRAY)
 			System.out.println(i.getCommand());
 	}
-
-	/**
-	 * Takes user command and find the match score of all the intents
-	 * and returns the intent with highest score
-	 * @param command
-	 * @return intent
-	 */
+    /**
+     * Searches all the intents to match the user query
+     * and returns that most matching intent, based on a cut off score 
+     * called fidelity.
+     * @param command
+     *      The command given by user
+     * @return Intent
+     *      Returns the intent to which the passed (user command) belongs
+     */
 	public static Intents searchIntent(String command){
-		Map<Intents, Double> intentScore=new HashMap<>();
-		double highscore=-10000;
 		System.out.println("\tLooking for: "+command+" in total intents: "+INTENTS_ARRAY.size());
+		command=command.toLowerCase();
 		for(Intents i: INTENTS_ARRAY){
-			double score=StringSimilarity.similarity(i.getCommand().toLowerCase(),
-					command.toLowerCase());					// Find the matching score
-			System.out.println("Intent: "+i.getCommand()+" score: "+score);
-			if(score>highscore) highscore=score;
-			intentScore.put(i, score);						// Put the intent and it's score
-		}
-		System.out.println("Highes score: "+highscore);
-		for(Entry<Intents,Double> e: intentScore.entrySet()){
-			if((e.getValue()==highscore) && (highscore>=fidelity))			// Find the intent with high score
-				return e.getKey();						// and if it's above the fidelity
+//			System.out.println("Looking for : "+command+" current command: "+i.getCommand());
+			if(command.contains(i.getCommand())){
+				System.out.println("That's a match +++++++++++++++++++++++++++++++++++");
+				return i;
+			}
 		}
 		return null;
 	}
-        // As of now there is no need for validating an intent
-	// This may be added when user could be able to add their apis
-	/*
-	private boolean isValidIntent(String command, String category){
-		WordRecommendations wr_cm=new WordRecommendations(command);
-		WordRecommendations wr_ct=new WordRecommendations(command);
-		if(wr_cm.isValidEnglishWord() && wr_ct.isValidEnglishWord())
-			return true;
-		return false;
-	}
-	*/
         
-    /**
-	 * Returns the response after processing the response received from API
-	 * by appending the response with 'append' parameter.
-	 * @param append
-	 * @return response
-	 */
+	/**
+     * Abstract method that should be implemented by all the inheriting classes
+     * @param append
+     *      String that should be appended to response
+     * @return response
+     *      Response tailored after parsing the JSON from API
+     */
 	public abstract String serve(String append);
         
     /**
      * Process user request and returns response
      * @param query
+     * 		User query.
      * @return 
+     * 		Returns response after processing the user request
      */
     public abstract String processRequest(String query);
 }

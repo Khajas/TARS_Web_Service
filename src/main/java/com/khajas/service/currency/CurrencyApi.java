@@ -32,20 +32,20 @@ public class CurrencyApi extends ApiCall{
      */
 	private CurrencyApi(){
 		// Add the expected intents that the user may ask TARS
-		super.addIntent("What's a dollar worth ", "currenyapi", "$1: ");
-		super.addIntent("dollar rate ", "currenyapi", "1 USD: ");
-		super.addIntent("1$ ", "currenyapi", "1 USD: ");
-		super.addIntent("Exchange rates ", "currenyapi", "Exchange Rate(1 USD): ");
-		super.addIntent("Today's exchange rate ", "currenyapi", "Exchange Rate(1 USD): ");
-		super.addIntent("What is today's exchange rate ", "currenyapi", "Exchange Rate(1 USD): ");
-		super.addIntent("Today's currency rate ", "currenyapi", "Currency Rate(1 USD): ");
-		super.addIntent("What is today's currency rate ", "currenyapi", "Currency Rate(1 USD): ");
+		super.addIntent("dollar worth", "currenyapi", "$1: ");
+		super.addIntent("dollar rate", "currenyapi", "1 USD: ");
+		super.addIntent("dollar value", "currenyapi", "1 USD: ");
+		super.addIntent("Exchange rates", "currenyapi", "Exchange Rate(1 USD): ");
+		super.addIntent("Exchange rate", "currenyapi", "Exchange Rate(1 USD): ");
+		super.addIntent("Currency rate", "currenyapi", "Currency Rate(1 USD): ");
+		super.addIntent("Currency rates", "currenyapi", "Currency Rate(1 USD): ");
 	}
 
 	/**
      * Constructor for base other than USD
      * A base must be valid, for more information visit http://fixer.io
      * @param base
+     * 		The base for currency conversation(Defalt value USD)
      */
 	public CurrencyApi(String base){
 		this();
@@ -56,7 +56,8 @@ public class CurrencyApi extends ApiCall{
      * Process the request by calling the URL for currency api 
      * and prepare the response, it also makes a call to super class- 
      * method to get the JSON response.
-     * @return 
+     * @return response
+     * 		Returns the response after processing user request
      */	
         @Override
 	public String processRequest(String query){
@@ -85,14 +86,16 @@ public class CurrencyApi extends ApiCall{
 		} catch (IOException | JSONException e) {
 			response=e.getMessage();
 		}
-                return response;
+        return response;
 	}
 
     /**
      * Makes a call to request processor( method processRequest())
      * and returns the response appended by the 'append' parameter.
 	 * @param append
+	 * 		A customized string that could be appended to response.
 	 * @return response
+	 * 		Response after processing user request.
      */
 	@Override
 	public String serve(String append) {

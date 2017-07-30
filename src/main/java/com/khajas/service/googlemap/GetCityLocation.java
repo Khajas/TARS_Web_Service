@@ -22,8 +22,7 @@ import org.json.JSONObject;
 import com.khajas.service.ApiCall;
 
 /**
- * Supports location services, it calls location API registered at
- * @Google Maps
+ * Supports location services, it calls location API registered at Google Maps
  * @author - Anwar
  */
 public class GetCityLocation extends ApiCall{
@@ -33,21 +32,23 @@ public class GetCityLocation extends ApiCall{
 	private final String city;
 	private String response;
 	
-        /**
-         * Constructor for 'city' other than user's current location
-         * @param city
-         */
+    /**
+     * Constructor for 'city' other than user's current location
+     * @param city
+     * 		Any valid city in the world.
+     */
 	public GetCityLocation(String city){
 		this.city=city;
 	}
 	
-        /**
-         * Process the request by calling the URL for google maps API
-         * and prepare the response, it also makes a call to super class
-         * method to get the JSON response.
-         * @return 
-         */
-        @Override
+    /**
+     * Process the request by calling the URL for google maps API
+     * and prepare the response, it also makes a call to super class
+     * method to get the JSON response.
+     * @return response
+     * 		Response after processing the string
+     */
+    @Override
 	public String processRequest(String query){
 		URL url;
 		try {
@@ -75,25 +76,29 @@ public class GetCityLocation extends ApiCall{
 	/**
 	 * Returns the latitude for the assigned city
 	 * @return latitude
+	 * 		Latitude of the city
 	 */
 	public String getLat(){
 		return latitude;
 	}
 
 	/**
-        * Returns the longitude for the assigned city
-        * @return longitude
-        */
+    * Returns the longitude for the assigned city
+    * @return longitude
+    * 		Longitude of the city.
+    */
 	public String getLng(){
 		return longitude;
 	}
 
-        /**
-         * Makes a call to request processor( method processRequest())
-         * and returns the response appended by the 'append' parameter.
-         * @param append
-         * @return response
-         */
+    /**
+     * Makes a call to request processor( method processRequest())
+     * and returns the response appended by the 'append' parameter.
+     * @param append
+     * 		A customized string that could be appended to response.
+     * @return response
+     * 		Response after processing user request.
+     */
 	@Override
 	public String serve(String append) {
 		return this.processRequest(""); // No query input needed
