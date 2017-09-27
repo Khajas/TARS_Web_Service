@@ -8,7 +8,7 @@
  * Contributors:
  *    Anwar - initial API and implementation and/or initial documentation
  */
-package com.khajas.service.GlobalDateTime;
+package com.khajas.service.globaldatetime;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -40,27 +40,18 @@ public class DateTimeApi extends ApiCall{
      * Constructor for datetime skill
      */
 	public DateTimeApi(){
-		super.addIntent("time ", "datetime", "");
-		super.addIntent("can you give me ", "datetime", "");
-		super.addIntent("can I get ", "datetime", "");
-		super.addIntent("give time ", "datetime", "");
-		super.addIntent("show me time ", "datetime", "");
-		super.addIntent("may I know ", "datetime", "");
-		super.addIntent("current time ", "datetime", "");
+		super.addIntent("current time", "datetime", "");
 		super.addIntent("time now", "datetime", "");
-		super.addIntent("what's time", "datetime", "");
-		super.addIntent("date", "datetime", "");
 		super.addIntent("today's date", "datetime", "");
 		super.addIntent("local time", "datetime", "");
-		super.addIntent("time of ", "datetime", "");
-		super.addIntent("time in ", "datetime", "");
-		super.addIntent("current time in ", "datetime", "");
-		super.addIntent("may I know the current time in ", "datetime", "");
+		super.addIntent("time", "datetime", "");
+		super.addIntent("date", "datetime", "");
 	}
 	 
 	/**
      * Constructor for city other than user local city(IP location)
      * @param city
+     * 		City from which client is contacting TARS server
      */
 	public DateTimeApi(String city){
 		this();
@@ -72,6 +63,7 @@ public class DateTimeApi extends ApiCall{
      * and prepare the response, it also makes a call to super class-
      * method to get the JSON response.
      * @return response
+     * 		Response after processing the user request
      */
         @Override
 	public String processRequest(String query){
@@ -97,18 +89,20 @@ public class DateTimeApi extends ApiCall{
 		} catch (IOException | JSONException e) {
 			response=e.getMessage();
 		}
-                return response;
+        return response;
 	}
 	
 	/**
 	 * Returns the date by parsing the datetime parameter
 	 * @param date_time
+	 * 		Accepts DateTime string for parsing to only date
 	 * @return date
+	 * 		Date after parsing the input string(that represents dateTime)
 	 */
-	private String getDate(String time){
+	private String getDate(String date_time){
 		DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime dateTime = LocalDateTime.parse(time, formatter);
+		LocalDateTime dateTime = LocalDateTime.parse(date_time, formatter);
 		DateTimeFormatter f = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
 		return dateTime.format(f);
 	}
@@ -116,22 +110,26 @@ public class DateTimeApi extends ApiCall{
 	/**
      * Returns the time(hh:mm a) by parsing the datetime parameter
      * @param date_time
-     * @return time
-     */
-	private String getTime(String time){
+	 * 		Accepts DateTime string for parsing to only time
+	 * @return time
+	 * 		time after parsing the input string(that represents dateTime)
+	 */
+	private String getTime(String date_time){
 		DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime dateTime = LocalDateTime.parse(time, formatter);
+		LocalDateTime dateTime = LocalDateTime.parse(date_time, formatter);
 		DateTimeFormatter f = DateTimeFormatter.ofPattern("hh:mm a");
 		return dateTime.format(f);
 	}
 	
 	/**
-         * Makes a call to request processor( method processRequest())
-         * and returns the response appended by the 'append' parameter.
-         * @param append
-         * @return response
-         */
+     * Makes a call to request processor( method processRequest())
+     * and returns the response appended by the 'append' parameter.
+     * @param append
+     * 		A customized string that should be appended to response.
+     * @return response
+     * 		Response after processing request from user.
+     */
 	@Override
 	public String serve(String append) {
 		this.processRequest("");
@@ -139,17 +137,19 @@ public class DateTimeApi extends ApiCall{
 	}
 
 	/**
-        * Set the city
-        * @param city
-        */
+    * Sets the city
+    * @param city
+    * 		Any valid city in the world.
+    */
 	public void setCity(String city){
 		this.city=city;
 	}
 	
 	/**
-        * Returns the prepared response
-        * @return response
-        */
+    * Returns the prepared response
+    * @return response
+    * 		Response after processig user query
+    */
 	public String getResponse(){
 		if(response!=null){
 			return response;

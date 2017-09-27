@@ -10,18 +10,19 @@
  */
 package com.khajas.resource;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.http.client.ClientProtocolException;
 
-import java.io.IOException;
+import com.khajas.model.UserQuery;
 
 /**
  * The following class is to receive the user query and return the response after processing 
@@ -33,8 +34,8 @@ import java.io.IOException;
 @Produces(MediaType.TEXT_PLAIN+";charset=UTF-8")
 public class RequestProcessor{
 	public String userIP;
-	@GET
-	@Path("/query/{queryString}")
+	@POST
+	@Path("/query")
 	/**
 	 * The first method that gets called when a user contacts TARS web service.
 	 * @param requestContext
@@ -48,16 +49,15 @@ public class RequestProcessor{
 	 * @throws IOException
 	 * 		Signals that an I/O exception of some sort has occurred.
 	 */
-	public String TARS_Response(@Context HttpServletRequest requestContext,
-					@PathParam("queryString") String query) 
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String TARS_Response(UserQuery query, @Context HttpServletRequest requestContext) 
 						throws ClientProtocolException, IOException{
 		userIP=requestContext.getRemoteAddr();		// Get user ip address
-		query=query.replaceAll("_"," ");		// Replace all the + from query
 		userIP=requestContext.getRemoteAddr();		// Let's use this IP for geo location mapping
 		if(userIP.contains("127.0")) 			// If it's local executed, let's make the IP as my default router's IP
 			userIP="2601:242:4000:be10:1acf:5eff:fedc:9a68";
-		System.out.println("Query before being passed to QueryTypeDetector: "+query);
-		QueryTypeDetector nqt=new QueryTypeDetector(userIP, query);		// Detect the query type
+		System.out.println("Query before being passed to QueryTypeDetector: "+query.getQuery());
+		QueryTypeDetector nqt=new QueryTypeDetector(userIP, query.getQuery());		// Detect the query type
 		return nqt.detectServiceType();			// and return the response from the detected object
 	}
 }
